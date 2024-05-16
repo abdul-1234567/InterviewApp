@@ -1,35 +1,38 @@
 import "./App.css";
-import logo from './logo.svg';
-
+import { useStyles } from './styles';
 import { useEffect, useState } from "react";
 import NavigationBar from "./pages/NavigationBar";
-import axios from "axios";
+import ImageContainer from "./components/ImagesContainer";
+import { getEvents } from './api';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 function App() {
-  const baseURL = "http://localhost:7071";
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  //TODO: API functions (more to be added) should be in their own file!
-  const getEvents = () => {
-    axios
-      .get(`${baseURL}/events`)
-      .then(function (response) {
-        setImages(response.data.scanResults);
-        console.log(response);
-      })
-      .catch(function (error) {
-        //TODO: this should display an error in the UI!
-        console.log(error);
-      });
-  };
+  const [showAllImages, setShowAllImages] = useState(true);
+  const [error, setError] = useState('');
+  const classes = useStyles();
 
   useEffect(() => {
-    getEvents();
+    getEvents(setImages, setError);
   }, []);
 
+  const nextImage = () => {
+    setCurrentImageIndex((index) => (index + 1) % filteredImages.length);
+  };
+  
+  const prevImage = () => {
+    setCurrentImageIndex((index) => (index - 1 + images.length) % filteredImages.length);
+  };
+
+  const handleToggle = (event) => {
+    setShowAllImages(event.target.checked);
+  };
+
+  const filteredImages = showAllImages ? images : images.filter(image => image.detectionsList.length !== 0);
+
   return (
-    //TODO: This code should be factored out into multiple files
     <div
       className="App"
       style={{
@@ -39,41 +42,26 @@ function App() {
       }}
     >
       <NavigationBar />
-      <div
-        // TODO: Styles can be defined in a seperate file using mui useStyle
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          alignContent: "center",
-          width: "85%",
-          height: "100%",
-        }}
-      >
-        {/* TODO: This button does nothing!  */}
-        <button type="button">Previous Image</button>
-        <div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <div> {images.length} total images </div>
-            <div> Index: {currentImageIndex} </div>
-          </div>
-          {images.length > 0 && <img src={images[currentImageIndex].jpg} />}
-          {images[currentImageIndex]?.createdOn && (
-            <div> Scan Timestamp: {images[currentImageIndex].createdOn} </div>
-          )}
-          {/* TODO: Finish adding image metadata!  */}
-          <div> Image Metadata: INCOMPLETE </div>
-          <div> Number of Detections: INCOMPLETE </div>
-        </div>
-        {/* TODO: This button also does nothing  */}
-        <button type="button">Next Image</button>
+      <div className={classes.contentContainer}>
+        {error ? (
+          <div>{error}</div>
+        ) : (
+          <>
+            <FormControlLabel
+              control={<Switch checked={showAllImages} onChange={handleToggle} />}
+              label="Show Images Without Detection"
+            />
+            {images.length > 0 && (
+              <>
+              <div className={classes.buttonContainer}>
+                <button type="button" onClick={prevImage}>Previous Image</button>
+                <button type="button" onClick={nextImage}>Next Image</button>
+              </div>
+              <ImageContainer images={filteredImages} currentImageIndex={currentImageIndex}/>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
