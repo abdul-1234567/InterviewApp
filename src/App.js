@@ -22,7 +22,7 @@ function App() {
   };
   
   const prevImage = () => {
-    setCurrentImageIndex((index) => (index - 1 + images.length) % filteredImages.length);
+    setCurrentImageIndex((index) => (index - 1 + filteredImages.length) % filteredImages.length);
   };
 
   const handleToggle = (event) => {
