@@ -1,25 +1,29 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/system';
 
-export const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
-        width: "85%",
-        height: "100%",
-    },
-    imageContainer: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
-    buttonContainer: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "50%",
-        marginBottom: "20px",
-    },
-}));
+export const ContentWrapper = styled('div') (() => 
+    `
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        width: 85%;
+        height: 100%;
+    `
+);
+export const ImageWrapper = styled('div') (() => 
+    `
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    `
+);
+export const ButtonWrapper = styled('div') (() => 
+    `
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 50%;
+        margin-bottom: 20px;
+    `
+);

@@ -1,18 +1,17 @@
 import "./App.css";
-import { useStyles } from './styles';
 import { useEffect, useState } from "react";
 import NavigationBar from "./pages/NavigationBar";
 import ImageContainer from "./components/ImagesContainer";
 import { getEvents } from './api';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import {ContentWrapper, ButtonWrapper} from './styles';
 
 function App() {
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAllImages, setShowAllImages] = useState(true);
   const [error, setError] = useState('');
-  const classes = useStyles();
 
   useEffect(() => {
     getEvents(setImages, setError);
@@ -42,7 +41,7 @@ function App() {
       }}
     >
       <NavigationBar />
-      <div className={classes.contentContainer}>
+      <ContentWrapper>
         {error ? (
           <div>{error}</div>
         ) : (
@@ -53,16 +52,16 @@ function App() {
             />
             {images.length > 0 && (
               <>
-              <div className={classes.buttonContainer}>
+              <ButtonWrapper>
                 <button type="button" onClick={prevImage}>Previous Image</button>
                 <button type="button" onClick={nextImage}>Next Image</button>
-              </div>
+              </ButtonWrapper>
               <ImageContainer images={filteredImages} currentImageIndex={currentImageIndex}/>
               </>
             )}
           </>
         )}
-      </div>
+      </ContentWrapper>
     </div>
   );
 }

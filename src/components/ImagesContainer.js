@@ -1,8 +1,7 @@
 import React from 'react';
-import { useStyles } from '../styles';
+import { ImageWrapper } from '../styles';
 
 const ImageContainer = ({ images, currentImageIndex }) => {
-  const classes = useStyles();
 
   const displayDetections = (detections) => {
     return detections.map((det, index) => (
@@ -17,10 +16,10 @@ const ImageContainer = ({ images, currentImageIndex }) => {
 
   return (
     <div>
-      <div className={classes.imageContainer}>
+      <ImageWrapper>
         <div> {images.length} total images </div>
         <div> Index: {currentImageIndex} </div>
-      </div>
+      </ImageWrapper>
       {images.length > 0 && <img src={images[currentImageIndex].jpg}/>}
       {images[currentImageIndex] && (
         <>
